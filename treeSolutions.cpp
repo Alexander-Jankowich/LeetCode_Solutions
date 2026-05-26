@@ -49,6 +49,41 @@ public:
 
         return leaves1 == leaves2;
     }
+    /**Super annoying Path Sum III problem wow. Remember to use long long to prevent overflow */
+    int countFrom(TreeNode* root, long long target){
+        if(root == nullptr){
+            return 0;
+        }
+        if((target - root->val) == 0){
+            return 1 + countFrom(root->left,0) + countFrom(root->right,0);
+        }else{
+            return countFrom(root->left,target - root->val) + countFrom(root->right,target - root->val);
+        }
+    }
+    int pathSum(TreeNode* root, int targetSum) {
+        if(root == nullptr){
+            return 0;
+        }
+        return countFrom(root, (long long)targetSum) + pathSum(root->left, (long long)targetSum) 
+        + pathSum(root->right, (long long)targetSum);
+    }
+    /**Longest ZigZag Solution best thing to do is keep global variable and dfs  */
+    int maxx = 0; 
+    void zigZagHelper(TreeNode* root, int direction, int length){
+        if(root){
+          maxx = std::max(length, maxx);
+          if(direction != -1) zigZagHelper(root->left,-1,length+1);
+          else zigZagHelper(root->left,-1,1);
+
+          if(direction != 1) zigZagHelper(root->right,1,length+1);
+          else zigZagHelper(root->right,1,1);  
+        }
+        
+    }
+    int longestZigZag(TreeNode* root) {
+        zigZagHelper(root,0,0);
+        return maxx;
+    }
 };
 
 int main() {
